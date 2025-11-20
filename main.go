@@ -23,7 +23,10 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer conn.Close()
 	
+	go handleConnection(conn)
+}
 
+func handleConnection(conn *websocket.Conn) {
 	// Listen for incoming messages
 	for {
 		// Read message from client
@@ -32,7 +35,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Error reading message:", err)
 			break
 		}
-		fmt.Printf("Received: %s\\n", message)
+		fmt.Printf("Received: %s\n", message)
 		// Echo the message back to the client
 		if err := conn.WriteMessage(websocket.TextMessage, message);
 		err != nil {
